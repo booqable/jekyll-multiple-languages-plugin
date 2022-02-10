@@ -405,7 +405,7 @@ module Jekyll
 
       TranslatedString.translate(key, lang, site)
 
-      translation
+      (translation == nil || translation == '') ? key : translation
     end
   end
 
@@ -558,7 +558,9 @@ module Jekyll
         end
       end
 
-      url
+      ## Use key as regular href in case we can't find a namespaced page
+      ## This we we can use tl dynimcally for internal and external links
+      (url == nil || url == '') ? @key : url
     end
   end
 
@@ -580,7 +582,6 @@ unless Hash.method_defined? :access
       ret = self
 
       path.split('.').each do |p|
-
         if p.to_i.to_s == p
           ret = ret[p.to_i]
         else
@@ -617,7 +618,7 @@ def translate_key(key, lang, site)
     puts "Using translation '%s' from default language: %s" %[translation, site.config['default_lang']]
   end
 
-  translation
+  (translation == nil || translation == '') ? key : translation
 end
 
 
