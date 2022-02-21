@@ -20,9 +20,12 @@ module Jekyll
   # :site, :post_render hook
   #*****************************************************************************
   Jekyll::Hooks.register :site, :pre_render do |site, payload|
-      lang = site.config['lang']
-      puts "Loading translation from file #{site.source}/_i18n/#{lang}.yml"
-      site.parsed_translations[lang] = YAML.load_file("#{site.source}/_i18n/#{lang}.yml")
+    lang = site.config['lang']
+    Dir["#{site.source}/_i18n/#{lang}*.yml"].select do |f|
+      puts "Loading translation from file #{f}"
+      site.parsed_translations[lang] ||= {}
+      site.parsed_translations[lang].merge!(YAML.load_file(f))
+    end
   end
 
   #*****************************************************************************
@@ -395,6 +398,7 @@ module Jekyll
       translation = site.parsed_translations[lang].access(key) if key.is_a?(String)
 
       if translation.nil? or translation.empty?
+        puts key
          translation = site.parsed_translations[site.config['default_lang']].access(key)
 
         if site.config["verbose"]
