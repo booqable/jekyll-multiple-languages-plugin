@@ -398,7 +398,6 @@ module Jekyll
       translation = site.parsed_translations[lang].access(key) if key.is_a?(String)
 
       if translation.nil? or translation.empty?
-        puts key
          translation = site.parsed_translations[site.config['default_lang']].access(key)
 
         if site.config["verbose"]
