@@ -549,14 +549,14 @@ module Jekyll
       end
 
       collections = site.collections.values.collect{|x| x.docs}.flatten
-      pages = site.pages + collections
+      pages = site.pages + collections + site.posts.docs
 
       for p in pages
         unless p['namespace'].nil? || (p['pagination_info'] && p['pagination_info']['curr_page'] != 1)
           page_namespace = p['namespace']
 
           if namespace == page_namespace
-            permalink = p['permalink_'+lang] || p['permalink']
+            permalink = p['permalink_'+lang] || p['permalink'] || p.url
             url       = baseurl + permalink.gsub('index.html', '')
           end
         end
